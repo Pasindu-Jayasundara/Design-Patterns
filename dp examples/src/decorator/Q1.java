@@ -2,116 +2,134 @@ package decorator;
 
 import java.util.Scanner;
 
-interface Coffee {
+// component interface
+interface Beverage {
 
-    double cost();
+    double getPrice();
+
+    String getDescription();
 }
 
-class BasicCoffee implements Coffee {
+// concrete components
+class Coffee implements Beverage {
 
     @Override
-    public double cost() {
+    public double getPrice() {
         return 500;
     }
-}
 
-abstract class BasicCoffeeDecorator implements Coffee {
-
-    protected Coffee coffee;
-
-    public BasicCoffeeDecorator(Coffee coffee) {
-        this.coffee = coffee;
+    @Override
+    public String getDescription() {
+        return "Make Coffee";
     }
 }
 
-class MilkDecorator extends BasicCoffeeDecorator {
+class Tea implements Beverage {
 
-    public MilkDecorator(Coffee coffee) {
-        super(coffee);
+    @Override
+    public double getPrice() {
+        return 200;
     }
 
     @Override
-    public double cost() {
-        return super.coffee.cost() + 100;
+    public String getDescription() {
+        return "Make Tea";
     }
 }
 
-class SugarDecorator extends BasicCoffeeDecorator {
+// decorators
+abstract class Decorator implements Beverage {
 
-    public SugarDecorator(Coffee coffee) {
-        super(coffee);
-    }
+    protected Beverage beverage;
 
-    @Override
-    public double cost() {
-        return super.coffee.cost() + 50;
+    public Decorator(Beverage beverage) {
+        this.beverage = beverage;
     }
 }
 
-class WhippedCreamDecorator extends BasicCoffeeDecorator {
+class SugarDecorator extends Decorator {
 
-    public WhippedCreamDecorator(Coffee coffee) {
-        super(coffee);
+    public SugarDecorator(Beverage beverage) {
+        super(beverage);
     }
 
     @Override
-    public double cost() {
-        return super.coffee.cost() + 25;
+    public double getPrice() {
+        return beverage.getPrice() + 50;
+    }
+
+    @Override
+    public String getDescription() {
+        return beverage.getDescription() + " ,Sugar";
     }
 }
 
-class ChocolateDecorator extends BasicCoffeeDecorator {
+class MilkDecorator extends Decorator {
 
-    public ChocolateDecorator(Coffee coffee) {
-        super(coffee);
+    public MilkDecorator(Beverage beverage) {
+        super(beverage);
     }
 
     @Override
-    public double cost() {
-        return super.coffee.cost() + 150;
+    public double getPrice() {
+        return beverage.getPrice() + 100;
+    }
+
+    @Override
+    public String getDescription() {
+        return beverage.getDescription() + " ,Milk";
+    }
+}
+
+class WhippedCreamDecorator extends Decorator {
+
+    public WhippedCreamDecorator(Beverage beverage) {
+        super(beverage);
+    }
+
+    @Override
+    public double getPrice() {
+        return beverage.getPrice() + 40;
+    }
+
+    @Override
+    public String getDescription() {
+        return beverage.getDescription() + " ,Whipped Cream";
+    }
+}
+
+class ChocolateDecorator extends Decorator {
+
+    public ChocolateDecorator(Beverage beverage) {
+        super(beverage);
+    }
+
+    @Override
+    public double getPrice() {
+        return beverage.getPrice() + 120;
+    }
+
+    @Override
+    public String getDescription() {
+        return beverage.getDescription() + " ,Chocolate";
     }
 }
 
 public class Q1 {
 
     public static void main(String[] args) {
-
-        Coffee coffee = new BasicCoffee();
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            System.out.println("\n\nChoose add-ons");
-            System.out.println("1. Milk");
-            System.out.println("2. Sugar");
-            System.out.println("3. Whipped Cream");
-            System.out.println("4. Chocolate");
-            System.out.println("0. Exit");
-
-            System.out.print("Choice: ");
-            String nextLine = scanner.nextLine();
-            switch (nextLine) {
-                case "0" -> {
-                    System.exit(0);
-                }
-                case "1" -> {
-                    coffee = new MilkDecorator(coffee);
-                }
-                case "2" -> {
-                    coffee = new SugarDecorator(coffee);
-                }
-                case "3" -> {
-                    coffee = new WhippedCreamDecorator(coffee);
-                }
-                case "4" -> {
-                    coffee = new ChocolateDecorator(coffee);
-                }
-                default -> {
-                    System.out.println("Invalid Input");
-                }
-            }
-            System.out.println("Price: " + coffee.cost());
-
-        } while (true);
+        
+        Beverage beverage = new Coffee();
+        beverage = new MilkDecorator(beverage);
+        beverage = new SugarDecorator(beverage);
+        System.out.println("Total price for Coffee: "+beverage.getPrice());
+        System.out.println("Description for Coffee: "+beverage.getDescription());
+        
+        Beverage beverage1 = new Tea();
+        beverage1 = new WhippedCreamDecorator(beverage1);
+        beverage1 = new ChocolateDecorator(beverage1);
+        System.out.println("Total price for Tea: "+beverage1.getPrice());
+        System.out.println("Description for Tea: "+beverage1.getDescription());
 
     }
 }
