@@ -11,11 +11,11 @@ abstract class Client{
     abstract void generateReport();
 }
 
-class IndividualClinet extends Client{
+class IndividualClient extends Client{
     
     int age;
     
-    public IndividualClinet(String name, int age){
+    public IndividualClient(String name, int age){
         super(name);
         this.age = age;
     }
@@ -66,10 +66,11 @@ class BusinessClient extends Client{
 public class Without {
     public static void main(String[] args) {
         
-        Client[] clients = [
-                       new IndividualClinet("John Doe", 28), 
-                       new BusinessClient("TecCorp", 50000,50)
-                ];
+        Client[] clients = {
+           new IndividualClient("dev", 20),
+           new BusinessClient("TecCorp", 50000, 50)
+        };
+
                        
         for(Client client:clients){
             client.calculatePremium();
